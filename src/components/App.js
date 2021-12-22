@@ -1,7 +1,6 @@
 import './App.css';
 import BookList from './BookList';
 import Summary from './Summary';
-import { useEffect, useState } from 'react';
 import Filters from './Filters';
 import AddBookForm from './AddBookForm';
 import Cart from './Cart';

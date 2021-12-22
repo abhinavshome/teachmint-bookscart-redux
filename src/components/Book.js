@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import bookApi from '../api/bookApi';
-import { rateDown, rateUp, rateUpOnServer } from '../store/booksSlice';
+import { rateDown, rateUpOnServer } from '../store/booksSlice';
 import { addToCart } from '../store/cartSlice';
 import './Book.css';
 import Stars from './Stars';
