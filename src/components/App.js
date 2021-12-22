@@ -8,13 +8,17 @@ import { NavLink, Route, Routes } from 'react-router-dom';
 import BookDetail from './BookDetail';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchBooksFromServer } from '../store/booksSlice';
+import { useEffect } from 'react';
 
 
 
 function App() {
   const dispatch = useDispatch();
   const cart = useSelector(state => state.cart);
-  dispatch(fetchBooksFromServer());
+  useEffect(() => {
+    dispatch(fetchBooksFromServer());
+  }, []);
+  
 
   return (
     <div className="App">
