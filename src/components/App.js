@@ -7,23 +7,15 @@ import AddBookForm from './AddBookForm';
 import Cart from './Cart';
 import { NavLink, Route, Routes } from 'react-router-dom';
 import BookDetail from './BookDetail';
-import bookApi from '../api/bookApi';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadBooks } from '../store/booksSlice';
+import { fetchBooksFromServer } from '../store/booksSlice';
 
 
 
 function App() {
   const dispatch = useDispatch();
   const cart = useSelector(state => state.cart);
-  const fetchBooksFromServer = async () => {
-    const resonse = await bookApi.get('/books');
-    dispatch(loadBooks(resonse.data));
-  }
-
-  useEffect(() => {
-    fetchBooksFromServer();
-  }, []);
+  dispatch(fetchBooksFromServer());
 
   return (
     <div className="App">
