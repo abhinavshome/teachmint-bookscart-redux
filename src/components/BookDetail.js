@@ -2,10 +2,13 @@ import { useParams } from "react-router-dom";
 
 const BookDetail = ({books}) => {
     const params = useParams();
-    const bookId = params.bookId;
-    console.log(bookId);
+    const bookId = +params.bookId;
+    console.log(bookId, books);
     const book = books.find(b => b.id === bookId);
-    console.log(books, book);
+    if(!book) {
+        return <div>Loading..</div>;
+    }
+
     return (
         <div>
             <h2>{book.title}</h2>

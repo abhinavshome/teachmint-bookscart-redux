@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { v4 } from "uuid";
 
 const AddBookForm = ({addBook}) => {
     const [message, setMessage] = useState('');
@@ -11,7 +10,6 @@ const AddBookForm = ({addBook}) => {
         const book = Object.fromEntries(formData.entries());
         book.rating = +book.rating;
         book.price = +book.price;
-        book.id = v4();
 
         if(!book.title || !book.author || !book.price) {
             setMessage('All fields are required')

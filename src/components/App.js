@@ -1,46 +1,17 @@
 import './App.css';
-import { v4 as uuidv4 } from 'uuid';
 import BookList from './BookList';
 import Summary from './Summary';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Filters from './Filters';
 import AddBookForm from './AddBookForm';
 import Cart from './Cart';
 import { NavLink, Route, Routes } from 'react-router-dom';
 import BookDetail from './BookDetail';
+import bookApi from '../api/bookApi';
 
 
 function App() {
-  const [books, setBooks] = useState([
-    {
-      id: uuidv4(),
-      title: 'The Alchemist',
-      author: 'Paulo Cohelo',
-      price: 20,
-      rating: 3
-    },
-    {
-      id: uuidv4(),
-      title: 'Monk who sold his ferrari',
-      author: 'Robin Sharma',
-      price: 40,
-      rating: 2
-    },
-    {
-      id: uuidv4(),
-      title: 'Power of Now',
-      author: 'Eckhart Tolle',
-      price: 10,
-      rating: 5
-    },
-    {
-      id: uuidv4(),
-      title: 'Five point someone',
-      author: 'Chetan Bhagat',
-      price: 35,
-      rating: 1
-    },
-  ]);
+  const [books, setBooks] = useState([]);
   const [filters, setFilters] = useState({
     showHighRated: false,
     showLessCostly: false
@@ -50,20 +21,33 @@ function App() {
     totalPrice: 0,
     totalItems: 0
   });
-  const inc = (bookId) => {
+
+  const loadBooks = async () => {
+    console.log('loading books');
+    const resonse = await bookApi.get('/books');
+    setBooks(resonse.data);
+  }
+
+  useEffect(() => {
+    loadBooks();
+  }, []);
+
+  const inc = async (bookId) => {
     const newBooks = [...books];
     const book = newBooks.find(b => b.id === bookId);
     if(book.rating < 5) {
       book.rating++;
     }
+    await bookApi.put(`/books/${bookId}`, book);
     setBooks(newBooks);
   };
-  const dec = (bookId) => {
+  const dec = async (bookId) => {
     const newBooks = [...books];
     const book = newBooks.find(b => b.id === bookId);
     if(book.rating > 1) {
       book.rating--;
     }
+    await bookApi.put(`/books/${bookId}`, book);
     setBooks(newBooks);
   };
   const toggleFilters = (filterName) => {
@@ -72,9 +56,11 @@ function App() {
     setFilters(newFilters);
   };
 
-  const addBook = (book) => {
+  const addBook = async (book) => {
+    const response = await bookApi.post('/books', book);
+    const bookFromServer = response.data;
     const newBooks = [...books];
-    newBooks.push(book);
+    newBooks.push(bookFromServer);
     setBooks(newBooks);
   };
 
