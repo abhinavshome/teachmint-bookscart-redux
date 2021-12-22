@@ -19,13 +19,21 @@ const Book = ({bookId}) => {
     }
 
     const rateBookUp = async () => {
+        const b = {...book};
+        if(b.rating < 5) {
+            b.rating++;
+            await bookApi.put(`/books/${b.id}`, b)
+        }
         dispatch(rateUp(bookId));
-        await bookApi.put(`/books/${book.id}`, book)
     };
 
     const rateBookDown = async () => {
+        const b = {...book};
+        if(b.rating > 1) {
+            b.rating--;
+            await bookApi.put(`/books/${b.id}`, b)
+        }
         dispatch(rateDown(bookId));
-        await bookApi.put(`/books/${book.id}`, book)
     };
 
     return (
