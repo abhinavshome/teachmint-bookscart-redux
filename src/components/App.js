@@ -6,7 +6,7 @@ import { useState } from 'react';
 import Filters from './Filters';
 import AddBookForm from './AddBookForm';
 import Cart from './Cart';
-import { Link, NavLink, Route, Routes } from 'react-router-dom';
+import { NavLink, Route, Routes } from 'react-router-dom';
 import BookDetail from './BookDetail';
 
 
