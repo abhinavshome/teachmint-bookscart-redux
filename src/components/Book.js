@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import './Book.css';
 import Stars from './Stars';
 
@@ -12,7 +13,9 @@ const Book = ({book, inc, dec, filters, addToCart}) => {
 
     return (
         <div>
-            <div className="title">{book.title}</div>
+            <div className="title">
+                <Link to={'/book/' + book.id}>{book.title}</Link>
+            </div>
             <div className="author">{book.author}</div>
             <div>{book.price}</div>
             <div><Stars rating={book.rating}/></div>

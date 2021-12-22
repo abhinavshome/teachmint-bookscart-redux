@@ -6,6 +6,8 @@ import { useState } from 'react';
 import Filters from './Filters';
 import AddBookForm from './AddBookForm';
 import Cart from './Cart';
+import { Link, NavLink, Route, Routes } from 'react-router-dom';
+import BookDetail from './BookDetail';
 
 
 function App() {
@@ -99,11 +101,24 @@ function App() {
   return (
     <div className="App">
       <h1>BooksCart</h1>
+      <nav>
+        <NavLink to="/">Home</NavLink>
+        <NavLink to="/cart">Cart({cart.totalItems})</NavLink>
+        <NavLink to="/add-book">Add Book</NavLink>
+      </nav>
       <Summary books={books}/>
-      <Cart cart={cart}/>
-      <AddBookForm addBook={addBook}/>
-      <Filters filters={filters} toggleFilters={toggleFilters}/>
-      <BookList books={books} inc={inc} dec={dec} filters={filters} addToCart={addToCart}/>
+      <Routes>
+        <Route path="/" element={<div>
+          <Filters filters={filters} toggleFilters={toggleFilters}/>
+          <BookList books={books} inc={inc} dec={dec} filters={filters} addToCart={addToCart}/>
+        </div>} />
+        <Route path="cart" element={<Cart cart={cart}/>}/>
+        <Route path="add-book" element={<AddBookForm addBook={addBook}/>} />        
+        <Route path="/book/:bookId" element={<BookDetail books={books}/>} />
+      </Routes>
+      
+      
+      
     </div>
   );
 }

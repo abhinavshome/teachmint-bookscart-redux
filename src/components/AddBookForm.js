@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { v4 } from "uuid";
 
 const AddBookForm = ({addBook}) => {
     const [message, setMessage] = useState('');
+    const navigate = useNavigate();
     const handleOnSubmit = (e) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
@@ -18,6 +20,8 @@ const AddBookForm = ({addBook}) => {
 
         setMessage('');
         addBook(book);
+        navigate('/');
+
     } 
     return (
         <>
