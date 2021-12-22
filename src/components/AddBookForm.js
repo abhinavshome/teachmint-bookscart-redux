@@ -1,10 +1,14 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import bookApi from "../api/bookApi";
+import { addBook } from "../store/booksSlice";
 
-const AddBookForm = ({addBook}) => {
+const AddBookForm = () => {
+    const dispatch = useDispatch();
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
-    const handleOnSubmit = (e) => {
+    const handleOnSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
         const book = Object.fromEntries(formData.entries());
@@ -17,8 +21,13 @@ const AddBookForm = ({addBook}) => {
         }
 
         setMessage('');
-        addBook(book);
-        navigate('/');
+        try {
+            const response = await bookApi.post('/books', book);
+            dispatch(addBook(response.data));
+            navigate('/');    
+        } catch(e) {
+            setMessage(e);
+        }
 
     } 
     return (

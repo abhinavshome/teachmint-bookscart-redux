@@ -8,81 +8,22 @@ import Cart from './Cart';
 import { NavLink, Route, Routes } from 'react-router-dom';
 import BookDetail from './BookDetail';
 import bookApi from '../api/bookApi';
+import { useDispatch, useSelector } from 'react-redux';
+import { loadBooks } from '../store/booksSlice';
+
 
 
 function App() {
-  const [books, setBooks] = useState([]);
-  const [filters, setFilters] = useState({
-    showHighRated: false,
-    showLessCostly: false
-  });
-  const [cart, setCart] = useState({
-    items: [],
-    totalPrice: 0,
-    totalItems: 0
-  });
-
-  const loadBooks = async () => {
-    console.log('loading books');
+  const dispatch = useDispatch();
+  const cart = useSelector(state => state.cart);
+  const fetchBooksFromServer = async () => {
     const resonse = await bookApi.get('/books');
-    setBooks(resonse.data);
+    dispatch(loadBooks(resonse.data));
   }
 
   useEffect(() => {
-    loadBooks();
+    fetchBooksFromServer();
   }, []);
-
-  const inc = async (bookId) => {
-    const newBooks = [...books];
-    const book = newBooks.find(b => b.id === bookId);
-    if(book.rating < 5) {
-      book.rating++;
-    }
-    await bookApi.put(`/books/${bookId}`, book);
-    setBooks(newBooks);
-  };
-  const dec = async (bookId) => {
-    const newBooks = [...books];
-    const book = newBooks.find(b => b.id === bookId);
-    if(book.rating > 1) {
-      book.rating--;
-    }
-    await bookApi.put(`/books/${bookId}`, book);
-    setBooks(newBooks);
-  };
-  const toggleFilters = (filterName) => {
-    const newFilters = {...filters};
-    newFilters[filterName] = !newFilters[filterName];
-    setFilters(newFilters);
-  };
-
-  const addBook = async (book) => {
-    const response = await bookApi.post('/books', book);
-    const bookFromServer = response.data;
-    const newBooks = [...books];
-    newBooks.push(bookFromServer);
-    setBooks(newBooks);
-  };
-
-  const addToCart = (book) => {
-    const newCart = {...cart};
-    const item = newCart.items.find(i => i.itemId === book.id);
-    if(item) {
-      item.qty++;
-    } else {
-      const item = {
-        itemId: book.id,
-        name: book.title,
-        price: book.price,
-        qty: 1
-      };
-      newCart.items.push(item);  
-    }
-
-    newCart.totalPrice += book.price;
-    newCart.totalItems++;
-    setCart(newCart);
-  }
 
   return (
     <div className="App">
@@ -92,15 +33,12 @@ function App() {
         <NavLink to="/cart">Cart({cart.totalItems})</NavLink>
         <NavLink to="/add-book">Add Book</NavLink>
       </nav>
-      <Summary books={books}/>
+      <Summary/>
       <Routes>
-        <Route path="/" element={<div>
-          <Filters filters={filters} toggleFilters={toggleFilters}/>
-          <BookList books={books} inc={inc} dec={dec} filters={filters} addToCart={addToCart}/>
-        </div>} />
-        <Route path="cart" element={<Cart cart={cart}/>}/>
-        <Route path="add-book" element={<AddBookForm addBook={addBook}/>} />        
-        <Route path="/book/:bookId" element={<BookDetail books={books}/>} />
+        <Route path="/" element={<div><Filters/><BookList/></div>} />
+        <Route path="cart" element={<Cart/>}/>
+        <Route path="add-book" element={<AddBookForm/>} />        
+        <Route path="/book/:bookId" element={<BookDetail/>} />
       </Routes>
       
       

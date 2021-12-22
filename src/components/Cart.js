@@ -1,4 +1,7 @@
-const Cart = ({cart}) => {
+import { useSelector } from "react-redux";
+
+const Cart = () => {
+    const cart = useSelector(state => state.cart);
     return (
         <table border="1">
             <thead>

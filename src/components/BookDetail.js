@@ -1,10 +1,11 @@
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
-const BookDetail = ({books}) => {
+const BookDetail = () => {
     const params = useParams();
     const bookId = +params.bookId;
-    console.log(bookId, books);
-    const book = books.find(b => b.id === bookId);
+    const book = useSelector(state => state.books.find(b => b.id === bookId));
+    console.log(bookId);
     if(!book) {
         return <div>Loading..</div>;
     }
