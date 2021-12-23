@@ -8,7 +8,6 @@ import Stars from './Stars';
 
 const Book = ({bookId}) => {
     let book = useSelector(state => state.books.find(b => b.id === bookId));
-    console.log(book);
 
     const filters = useSelector(state => state.filters);
     const dispatch = useDispatch();
